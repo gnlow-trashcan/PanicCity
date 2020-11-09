@@ -23,7 +23,22 @@ type OperatorNamesByOutputType<O> = Extract<
 > ["name"]
 
 type Operator<O> = {
-    [N in OperatorNamesByOutputType<O>]: Parameters<typeof operatorFuncs[N]>
-}
+    /* 
+        Single-key object type
+        https://stackoverflow.com/a/57576688
+        ```
+        type OneKey<K extends string, V = any> = {
+        [P in K]: (Record<P, V> &
+            Partial<Record<Exclude<K, P>, never>>) extends infer O
+            ? { [Q in keyof O]: O[Q] }
+            : never
+        }[K]
+        ```
+    */
+    [P in OperatorNamesByOutputType<O>]: (Record<P, Parameters<typeof operatorFuncs[P]>> &
+        Partial<Record<Exclude<OperatorNamesByOutputType<O>, P>, never>>) extends infer O
+        ? { [Q in keyof O]: O[Q] }
+        : never
+}[OperatorNamesByOutputType<O>]
 
 const a: Operator<boolean> = {"==": [1, 2]}
