@@ -15,7 +15,7 @@ type OperatorInfos = {
     } 
 }
 
-type OperatorByOutputType<O> = Extract<
+type OperatorNamesByOutputType<O> = Extract<
     ValueOf<OperatorInfos>, 
     { output: O }
 > extends {name: infer N} ? N: never
@@ -27,10 +27,5 @@ type Operator<
 > = {[K in N]: Parameters<typeof operatorFuncs[K]>}
 
 interface Ability {
-    if: Operator
+    if: Operator<OperatorNamesByOutputType<boolean>>
 }
-
-type Onl<U> = U extends {name: infer N} ? N: never
-
-const a: ValueOf<OperatorInfos> & { output: boolean }
-const b: OperatorByOutputType<boolean>
