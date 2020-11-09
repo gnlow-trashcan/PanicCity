@@ -22,6 +22,10 @@ type OperatorNamesByOutputType<O> = Extract<
     { output: O }
 > ["name"]
 
+type OperatorInputFromFunc<F extends (...args: any) => any> = 
+    F extends () => any ? undefined
+    : F extends (input: infer I) => any ? I : Parameters<F>
+
 type Operator<O> = {
     /* 
         Single-key object type
@@ -35,7 +39,7 @@ type Operator<O> = {
         }[K]
         ```
     */
-    [P in OperatorNamesByOutputType<O>]: (Record<P, Parameters<typeof operatorFuncs[P]>> &
+    [P in OperatorNamesByOutputType<O>]: (Record<P, OperatorInputFromFunc<typeof operatorFuncs[P]>> &
         Partial<Record<Exclude<OperatorNamesByOutputType<O>, P>, never>>) extends infer O
         ? { [Q in keyof O]: O[Q] }
         : never
