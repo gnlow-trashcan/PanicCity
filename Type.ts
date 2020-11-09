@@ -40,5 +40,3 @@ type Operator<O> = {
         ? { [Q in keyof O]: O[Q] }
         : never
 }[OperatorNamesByOutputType<O>]
-
-const a: Operator<boolean> = {"==": [1, 2]}
