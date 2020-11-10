@@ -29,9 +29,24 @@ type OperatorInputFromFunc<F extends (...args: any) => any> =
 
 type OperatorInputFromName<N extends OperatorNames> = OperatorInputFromFunc<typeof operatorFuncs[N]>
 
-type Operator<O> = Partial<{
-    [N in OperatorNamesByOutputType<O>]: OperatorInputFromName<N>
-}> /* Should be single-key object. Tried https://stackoverflow.com/a/57576688 , but it occurs error. */
+type Operator<O> = {
+    /* 
+        Single-key object type
+        https://stackoverflow.com/a/57576688
+        ```
+        type OneKey<K extends string, V = any> = {
+        [P in K]: (Record<P, V> &
+            Partial<Record<Exclude<K, P>, never>>) extends infer O
+            ? { [Q in keyof O]: O[Q] }
+            : never
+        }[K]
+        ```
+    */
+    [P in OperatorNamesByOutputType<O>]: (Record<P, OperatorInputFromName<P>> &
+        Partial<Record<Exclude<OperatorNamesByOutputType<O>, P>, never>>) extends infer O
+        ? { [Q in keyof O]: O[Q] }
+        : never
+}[OperatorNamesByOutputType<O>]
 
 interface Ability {
     if: Operator<boolean>[]
