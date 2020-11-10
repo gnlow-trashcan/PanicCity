@@ -42,8 +42,8 @@ type Operator<O> = {
         }[K]
         ```
     */
-    [P in OperatorNamesByOutputType<O>]: (Record<P, OperatorInputFromName<P>> &
-        Partial<Record<Exclude<OperatorNamesByOutputType<O>, P>, never>>) extends infer O
+    [P in OperatorNamesByOutputType<O>]: ({ [A in P]: OperatorInputFromName<P> } &
+        Partial<{ [B in Exclude<OperatorNamesByOutputType<O>, P>]: never }>) extends infer O
         ? { [Q in keyof O]: O[Q] }
         : never
 }[OperatorNamesByOutputType<O>]
