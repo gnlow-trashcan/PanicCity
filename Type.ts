@@ -24,7 +24,7 @@ type OperatorNamesByOutputType<O> = Extract<
 
 type OperatorInputFromFunc<F extends (...args: any) => any> = 
     F extends () => any ? undefined :
-    F extends (input: infer I) => any ? I | Operator<I> :
+    F extends (input: infer I) => any ? I :
     Parameters<F>
 
 type Operator<O> = {
