@@ -50,14 +50,7 @@ type Operator<O> = {
         : never
 }[OperatorNamesByOutputType<O>]
 
-interface Ability {
-    if: Operator<boolean>[]
-}
-
-const justice: Ability = {
-    if: [
-        { "==": [ { votes: { team: "mafia" } }, 0 ] },
-        { "==": [ { votes: { role: "cultReader" } }, 0 ] },
-        { ">=": [ { votes: { team: "citizenTeam" } }, { votes: { team: "cultTeam" } } ] }
-    ]
+export interface Ability {
+    if: Operator<boolean>[],
+    then: Operator<any>[],
 }
