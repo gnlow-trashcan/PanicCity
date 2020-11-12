@@ -1,0 +1,17 @@
+{
+    "version": 2,
+    "env": {
+        "APP_ID": "@channels-app-id",
+        "KEY": "568a922f75e7dbd9eb1a",
+        "SECRET": "@channels-app-secret",
+        "CLUSTER": "ap3"
+    },
+    "functions": {
+		"api/**/*.[jt]s": { "runtime": "vercel-deno@0.7.5" }
+    },
+    "build": {
+        "env": {
+            "DENO_TSCONFIG": "tsconfig.json"
+        }
+    }
+}
